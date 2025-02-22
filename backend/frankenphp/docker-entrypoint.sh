@@ -55,6 +55,10 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 		if [ "$( find ./migrations -iname '*.php' -print -quit )" ]; then
 			php bin/console doctrine:migrations:migrate --no-interaction --all-or-nothing
 		fi
+
+		if [ -z "$(find /config/jwt -iname '*.pem' -print -quit)" ]; then
+			php bin/console lexik:jwt:generate-keypair --no-interaction --skip-if-exists
+		fi
 	fi
 
 	setfacl -R -m u:www-data:rwX -m u:"$(whoami)":rwX var
