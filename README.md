@@ -15,3 +15,11 @@ Ejemplo:
 ```bash
 cd backend && docker-compose down --rmi local --volumes --remove-orphans && docker compose up --pull always -d --wait && cd ..
 ```
+
+## Ejecución de pruebas con PHPUnit
+
+Ejemplo:
+
+```bash
+cd backend && php bin/phpunit
+```
