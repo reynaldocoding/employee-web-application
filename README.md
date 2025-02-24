@@ -13,7 +13,7 @@ docker network create employee-network
 Ejemplo:
 
 ```bash
-cd backend && docker-compose down --rmi local --volumes --remove-orphans && docker compose up --pull always -d --wait && cd ..
+cd notification-service && docker-compose down --rmi local --volumes --remove-orphans && docker compose up -d --wait && cd .. && cd backend && docker-compose down --rmi local --volumes --remove-orphans && docker compose up --pull always -d --wait && cd ..
 ```
 
 ## Ejecución de pruebas con PHPUnit
