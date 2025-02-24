@@ -35,7 +35,7 @@ final class AuthController extends AbstractController
         try {
             $content = $request->getContent();
             if (empty($content)) {
-                return $this->responseService->createResponse(false, 'Request body is empty', Response::HTTP_BAD_REQUEST);
+                return $this->responseService->createResponse(false, 'El cuerpo de la solicitud está vacío', Response::HTTP_BAD_REQUEST);
             }
 
             $data = json_decode($content, true);
@@ -52,7 +52,7 @@ final class AuthController extends AbstractController
                 foreach ($violations as $violation) {
                     $errors[] = $violation->getMessage();
                 }
-                return $this->responseService->createResponse(false, 'Validation errors', Response::HTTP_BAD_REQUEST, $errors);
+                return $this->responseService->createResponse(false, 'Errores de validación', Response::HTTP_BAD_REQUEST, $errors);
             }
 
             // Check if the user already exists
@@ -60,7 +60,7 @@ final class AuthController extends AbstractController
                 ->getRepository(User::class)
                 ->findOneBy(['email' => $data['email']]);
             if ($existingUser) {
-                return $this->responseService->createResponse(false, 'Email already in use', Response::HTTP_CONFLICT);
+                return $this->responseService->createResponse(false, 'El correo electrónico ya está en uso', Response::HTTP_CONFLICT);
             }
 
             $user = new User();
@@ -73,7 +73,7 @@ final class AuthController extends AbstractController
 
             $token = $this->jwtManager->create($user);
 
-            return $this->responseService->createResponse(true, 'User registered successfully', Response::HTTP_CREATED, ['token' => $token]);
+            return $this->responseService->createResponse(true, 'Usuario registrado exitosamente', Response::HTTP_CREATED, ['token' => $token]);
         } catch (\Exception $e) {
             return $this->responseService->createResponse(false, 'Error: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -84,10 +84,10 @@ final class AuthController extends AbstractController
     {
         $user = $this->getUser();
         if (!$user) {
-            return $this->responseService->createResponse(false, 'User not found', Response::HTTP_BAD_REQUEST);
+            return $this->responseService->createResponse(false, 'Usuario no encontrado', Response::HTTP_BAD_REQUEST);
         }
 
-        return $this->responseService->createResponse(true, 'User data retrieved', Response::HTTP_OK, [
+        return $this->responseService->createResponse(true, 'Datos de usuario obtenidos', Response::HTTP_OK, [
             'email' => $user->getUserIdentifier(),
         ]);
     }
@@ -96,6 +96,6 @@ final class AuthController extends AbstractController
     public function logout()
     {
         $this->tokenStorage->setToken(null);
-        return $this->responseService->createResponse(true, 'Successfully logged out', Response::HTTP_OK);
+        return $this->responseService->createResponse(true, 'Se ha cerrado la sesión correctamente', Response::HTTP_OK);
     }
 }

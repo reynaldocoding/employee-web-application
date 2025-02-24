@@ -20,5 +20,10 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    # explicitly configure the service
+    App\Service\PositionService:
+        arguments:
+            $apiPositionsUrl: '%env(API_POSITIONS_URL)%'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
