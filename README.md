@@ -77,3 +77,13 @@ Para ejecutar las pruebas realizar lo siguiente:
 ```bash
 cd backend && php bin/phpunit
 ```
+
+## Notas Adicionales
+
+- La interacción de la creación del usuario es tanto vía Endpoint *(revisar la colección Postman)* como Frontend React.
+- La Colección de endpoints de la API en Postman está en [docs/1_ENDPOINTS.postman_collection.json](docs/1_ENDPOINTS.postman_collection.json).
+- Diagrama de la arquitectura del sistema se encuentra en [docs/2_Diagrama_arquitectura.png](docs/2_Diagrama_arquitectura.png).
+
+## Creado por Reynaldo Coca
+
+¡Gracias por visitar mi proyecto!
