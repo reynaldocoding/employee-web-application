@@ -19,10 +19,9 @@ services:
         networks:
             - employee-network
         volumes:
-            - .:/var/www/html
+            - ./:/app
             - caddy_data:/data
             - caddy_config:/config
-        working_dir: /var/www/html
         ports:
             # HTTP
             - target: 80

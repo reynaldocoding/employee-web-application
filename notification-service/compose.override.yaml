@@ -1,6 +1,6 @@
 # Development environment override
 services:
-  php:
+  php: &php_service
     build:
       context: .
       target: frankenphp_dev
@@ -19,6 +19,10 @@ services:
       # Ensure that host.docker.internal is correctly defined on Linux
       - host.docker.internal:host-gateway
     tty: true
+  messenger-consumer:
+    <<: *php_service
+    container_name: ''
+    ports: []
 
 ###> symfony/mercure-bundle ###
 ###< symfony/mercure-bundle ###

@@ -1,6 +1,6 @@
 # Production environment override
 services:
-  php:
+  php: &php_service
     build:
       context: .
       target: frankenphp_prod
@@ -8,3 +8,7 @@ services:
       APP_SECRET: ${APP_SECRET}
       MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
+  messenger-consumer:
+    <<: *php_service
+    container_name: ''
+    ports: []
