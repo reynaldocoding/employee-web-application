@@ -49,7 +49,9 @@ docker-compose down --rmi local --volumes --remove-orphans && docker compose up 
 ```
 
 ```bash
-cd .. && cd backend && docker-compose down --rmi local --volumes --remove-orphans && docker compose up --pull always -d --wait
+cd .. && cd backend && docker compose build --no-cache
+
+docker-compose down --rmi local --volumes --remove-orphans && docker compose up --pull always -d --wait
 ```
 
 ## Ejecución de pruebas con PHPUnit
