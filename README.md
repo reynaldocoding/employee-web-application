@@ -24,7 +24,9 @@ Finalmente para probar ejecuta:
 
 ```bash
 cd notification-service
+```
 
+```bash
 php bin/console mailer:test someone@example.com
 ```
 
@@ -34,7 +36,9 @@ Realizar la ejecución de lo siguiente en el mismo orden dentro la terminal:
 
 ```bash
 git clone https://github.com/reynaldocoding/employee-web-application.git
+```
 
+```bash
 cd employee-web-application
 ```
 
@@ -44,19 +48,31 @@ cd rabbit && docker-compose down --rmi local --volumes --remove-orphans && docke
 
 ```bash
 cd .. && cd notification-service && docker compose build --no-cache
+```
 
+```bash
 docker-compose down --rmi local --volumes --remove-orphans && docker compose up --pull always -d --wait
 ```
 
 ```bash
 cd .. && cd backend && docker compose build --no-cache
+```
 
+```bash
 docker-compose down --rmi local --volumes --remove-orphans && docker compose up --pull always -d --wait
 ```
 
+```bash
+cd .. && cd frontend-service && docker-compose down --rmi local --volumes --remove-orphans && docker-compose up -d --build
+```
+
+## Acceso al Frontend (React)
+
+Finalmente, para interactuar con el Frontend React acceder a: <http://localhost:3000/login>.
+
 ## Ejecución de pruebas con PHPUnit
 
-Para la ejecución realizar lo siguiente:
+Para ejecutar las pruebas realizar lo siguiente:
 
 ```bash
 cd backend && php bin/phpunit

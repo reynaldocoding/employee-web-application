@@ -1,0 +1,21 @@
+services:
+    frontend-service:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "3000:3000"
+        networks:
+            - employee-network
+        volumes:
+            - .:/app
+            - ./node_modules:/app/node_modules
+        environment:
+            NODE_ENV: development
+        stdin_open: true
+        tty: true
+        command: npm start
+
+networks:
+    employee-network:
+        external: true
