@@ -1,5 +1,5 @@
 services:
-    php:
+    php: &php_service
         container_name: notification-service
         image: ${IMAGES_PREFIX:-}app-php
         restart: unless-stopped
@@ -19,8 +19,10 @@ services:
         networks:
             - employee-network
         volumes:
+            - .:/var/www/html
             - caddy_data:/data
             - caddy_config:/config
+        working_dir: /var/www/html
         ports:
             # HTTP
             - target: 80
@@ -28,12 +30,31 @@ services:
               protocol: tcp
             # HTTPS
             - target: 443
-              published: ${HTTPS_PORT:-8443}
+              published: ${HTTPS_PORT:-8442}
               protocol: tcp
             # HTTP/3
             - target: 443
-              published: ${HTTP3_PORT:-8443}
+              published: ${HTTP3_PORT:-8442}
               protocol: udp
+
+    #https://github.com/dunglas/symfony-docker/issues/539
+    messenger-consumer:
+        <<: *php_service
+        container_name: ''
+        restart: unless-stopped
+        deploy:
+            mode: replicated
+            replicas: 2
+        healthcheck:
+            disable: true
+            #command: /usr/bin/true # if "disable: true" isn't works
+
+        # if you need to disable the entry point provided by this repository
+        #entrypoint: ""
+
+        # https://symfony.com/doc/current/messenger.html#deploying-to-production
+        command: bin/console messenger:consume welcome_email --time-limit=3600
+        ports: []
 
 # Mercure is installed as a Caddy module, prevent the Flex recipe from installing another service
 ###> symfony/mercure-bundle ###
@@ -46,5 +67,5 @@ networks:
 volumes:
     caddy_data:
     caddy_config:
-###> symfony/mercure-bundle ###
-###< symfony/mercure-bundle ###
+        ###> symfony/mercure-bundle ###
+        ###< symfony/mercure-bundle ###

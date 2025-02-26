@@ -29,7 +29,9 @@ RUN set -eux; \
 		@composer \
 		apcu \
 		intl \
+		amqp \
 		opcache \
+		pcntl \
 		zip \
 	;
 
@@ -59,6 +61,8 @@ RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 RUN set -eux; \
 	install-php-extensions \
+		amqp \
+		pcntl \
 		xdebug \
 	;
 

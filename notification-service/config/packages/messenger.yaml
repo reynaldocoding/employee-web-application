@@ -1,0 +1,44 @@
+framework:
+    messenger:
+        # The bus that is going to be injected when injecting MessageBusInterface
+        default_bus: event.bus
+        buses:
+            event.bus:
+                default_middleware:
+                    enabled: true
+                    # set "allow_no_handlers" to true (default is false) to allow having
+                    # no handler configured for this bus without throwing an exception
+                    #allow_no_handlers: false
+                    # set "allow_no_senders" to false (default is true) to throw an exception
+                    # if no sender is configured for this bus
+                    #allow_no_senders: true
+                middleware:
+                    #- validation
+        # Uncomment this (and the failed transport below) to send failed messages to this transport for later handling.
+        # failure_transport: failed
+
+        transports:
+            # https://symfony.com/doc/current/messenger.html#transport-configuration
+            # async: '%env(MESSENGER_TRANSPORT_DSN)%'
+            # failed: 'doctrine://default?queue_name=failed'
+            # sync: 'sync://'
+ 
+            welcome_email:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                #serializer: 'App\Messenger\Serializer\SendWelcomeEmailMessageSerializer'
+                options:
+                    queues:
+                        external_queue: ~
+
+        routing:
+            # Route your messages to the transports
+            # 'App\Message\YourMessage': async
+            'App\Message\SendWelcomeEmailMessage': welcome_email
+
+# when@test:
+#    framework:
+#        messenger:
+#            transports:
+#                # replace with your transport name here (e.g., my_transport: 'in-memory://')
+#                # For more Messenger testing tools, see https://github.com/zenstruck/messenger-test
+#                async: 'in-memory://'

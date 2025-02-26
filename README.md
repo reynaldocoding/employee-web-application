@@ -20,12 +20,28 @@ Para verificar que los correos lleguen correctamente, actualiza la variable `MAI
 MAILER_DSN=smtp://user:password@smtp.server.com:587
 ```
 
-## Despliegue
-
-Ejemplo:
+Finalmente para probar ejecuta:
 
 ```bash
-cd notification-service && docker-compose down --rmi local --volumes --remove-orphans && docker compose up -d --wait && cd .. && cd backend && docker-compose down --rmi local --volumes --remove-orphans && docker compose up --pull always -d --wait && cd ..
+cd notification-service
+php bin/console mailer:test someone@example.com
+```
+
+## Despliegue
+
+Realizar la ejecución de lo siguiente en terminal:
+
+```bash
+git clone https://github.com/reynaldocoding/employee-web-application.git
+cd employee-web-application
+```
+
+```bash
+cd rabbit && docker-compose down --rmi local --volumes --remove-orphans && docker compose up -d --wait && cd .. && cd notification-service && docker compose build --no-cache && docker-compose down --rmi local --volumes --remove-orphans && docker compose up -d --wait
+```
+
+```bash
+cd .. && cd backend && docker compose build --no-cache && docker-compose down --rmi local --volumes --remove-orphans && docker compose up --pull always -d --wait && cd ..
 ```
 
 ## Ejecución de pruebas con PHPUnit
