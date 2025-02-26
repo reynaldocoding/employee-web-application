@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Employee;
+use App\Message\SendWelcomeEmailMessage;
 use App\Repository\EmployeeRepository;
 use App\Service\PositionService;
 use App\Service\ResponseService;
@@ -11,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -55,7 +57,7 @@ final class EmployeeController extends AbstractController
     }
 
     #[Route('/employees', name: 'employee_create', methods: 'post')]
-    public function create(Request $request): JsonResponse
+    public function create(Request $request, MessageBusInterface $bus): JsonResponse
     {
         try {
             $employee = new Employee();
@@ -77,6 +79,9 @@ final class EmployeeController extends AbstractController
 
             $this->entityManager->persist($employee);
             $this->entityManager->flush();
+
+            // will cause the SendWelcomeEmailMessageHandler to be called
+            $bus->dispatch(new SendWelcomeEmailMessage($employee->getEmail(), $employee->getFullName()));
 
             return $this->responseService->createResponse(
                 true,
@@ -215,6 +220,9 @@ final class EmployeeController extends AbstractController
         }
         if (isset($data['birthdate'])) {
             $employee->setBirthdate(new \DateTime($data['birthdate']));
+        }
+        if (isset($data['email'])) {
+            $employee->setEmail($data['email']);
         }
         $employee->setUpdatedAt(new \DateTimeImmutable());
     }

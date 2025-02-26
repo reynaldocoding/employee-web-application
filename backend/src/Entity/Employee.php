@@ -6,11 +6,13 @@ use App\Repository\EmployeeRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Attribute\Context;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
+#[UniqueEntity('email', message: "El correo electrónico ya está en uso.")]
 #[HasLifecycleCallbacks]
 class Employee
 {
@@ -48,6 +50,14 @@ class Employee
     #[Assert\NotBlank(message: "Se requiere la fecha de nacimiento")]
     private ?\DateTimeInterface $birthdate = null;
 
+    #[ORM\Column(length: 180, unique: true)]
+    #[Assert\NotBlank(message: "Se requiere el correo electrónico")]
+    #[Assert\Email(
+        message: 'El correo electrónico {{ value }} no es un correo electrónico válido.'
+    )]
+    #[Assert\Length(max: 180)]
+    private ?string $email = null;
+
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
@@ -83,6 +93,11 @@ class Employee
         return $this;
     }
 
+    public function getFullName(): ?string
+    {
+        return $this->name . ' ' . $this->lastNames;
+    }
+
     public function getPosition(): ?string
     {
         return $this->position;
@@ -103,6 +118,18 @@ class Employee
     public function setBirthdate(\DateTimeInterface $birthdate): static
     {
         $this->birthdate = $birthdate;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
 
         return $this;
     }

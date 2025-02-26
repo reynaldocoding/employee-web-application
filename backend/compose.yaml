@@ -1,5 +1,6 @@
 services:
     php:
+        container_name: backend-service
         image: ${IMAGES_PREFIX:-}app-php-backend
         restart: unless-stopped
         environment:
